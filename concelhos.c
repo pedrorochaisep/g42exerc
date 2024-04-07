@@ -26,7 +26,39 @@ typedef struct {
  * Retorna número de concelhos lidos.
  */
 int ler_tabela(char *nomefich, concelho *tab) {
-    return 0;
+    FILE *ficheiro = fopen(nomefich, "r");
+    if (ficheiro == NULL) {
+        printf("Erro ao abrir o ficheiro %s.\n", nomefich);
+        return 0;
+    }
+
+    int num_concelhos = 0;
+    char linha[MAX_LINHA];
+
+    // Ler cada linha do arquivo
+    while (fgets(linha, MAX_LINHA, ficheiro) != NULL) {
+        // Separar os campos da linha usando strtok
+        char *token = strtok(linha, ",");
+        
+        // Copiar o nome do concelho para a estrutura
+        strcpy(tab[num_concelhos].nome, token);
+
+        // Ler os valores de homens, mulheres e área
+        token = strtok(NULL, ",");
+        tab[num_concelhos].homens = atoi(token);
+
+        token = strtok(NULL, ",");
+        tab[num_concelhos].mulheres = atoi(token);
+
+        token = strtok(NULL, ",");
+        tab[num_concelhos].area = atof(token);
+
+        // Incrementar o contador de concelhos
+        num_concelhos++;
+    }
+
+    fclose(ficheiro);
+    return num_concelhos;
 }
 
 /*
@@ -88,32 +120,35 @@ void resumo_tabela(concelho *tab, int nc) {
  * Determina área total do conjunto de concelhos
  */
 float total_area(concelho *lista, int nc) {
-	
-	// Desenvolva o código da função
-	
-    return 0.;
+    float area_total = 0.0;
+    for (int i = 0; i < nc; i++) {
+        area_total += lista[i].area;
+    }
+    return area_total;
 }
+
 
 /*
  * B.2.b)
  * Determina área média por concelho
  */
 float media_area(concelho *lista, int nc) {
-	
-	// Desenvolva o código da função
-		
-    return 0.;
+    if (nc == 0) return 0.0;
+    float area_total = total_area(lista, nc);
+    return area_total / nc;
 }
+
 
 /*
  * B.4.a)
  * Determina população total do conjunto de concelhos
  */
 int total_pop(concelho *tab, int nc) {
-	
-	// Desenvolva o código da função
-		
-    return 0;
+    int pop_total = 0;
+    for (int i = 0; i < nc; i++) {
+        pop_total += tab[i].homens + tab[i].mulheres;
+    }
+    return pop_total;
 }
 
 /*
@@ -121,11 +156,18 @@ int total_pop(concelho *tab, int nc) {
  * Determina índice do concelho com maior área.
  */
 int max_area(concelho *tab, int nc) {
-	
-	// Desenvolva o código da função
-		
-    return -1;
+    if (nc == 0) return -1;
+    int indice_max_area = 0;
+    float max_area = tab[0].area;
+    for (int i = 1; i < nc; i++) {
+        if (tab[i].area > max_area) {
+            max_area = tab[i].area;
+            indice_max_area = i;
+        }
+    }
+    return indice_max_area;
 }
+
 
 /*
  * Determina índice do concelho com maior população.
@@ -224,6 +266,12 @@ int main() {
     ordem_h100m(tab_h100m,NConcelhos);
     resumo_tabela(tab_h100m, NConcelhos);
     free(tab_h100m);
+
+setlocale(LC_CTYPE, "");
+
+    concelho tabela1[MAX_CONCELHOS];
+
+    int NConcelhos = ler_tabela("concelhos_utf8.csv", tabela1);
 
 
 }
