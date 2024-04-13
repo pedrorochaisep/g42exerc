@@ -37,13 +37,11 @@ int ler_tabela(char *nomefich, concelho *tab) {
 
     // Ler cada linha do arquivo
     while (fgets(linha, MAX_LINHA, ficheiro) != NULL) {
-        // Separar os campos da linha usando strtok
+    
         char *token = strtok(linha, ",");
+  
         
-        // Copiar o nome do concelho para a estrutura
         strcpy(tab[num_concelhos].nome, token);
-
-        // Ler os valores de homens, mulheres e área
         token = strtok(NULL, ",");
         tab[num_concelhos].homens = atoi(token);
 
@@ -173,60 +171,123 @@ int max_area(concelho *tab, int nc) {
  * Determina índice do concelho com maior população.
  */
 int max_pop(concelho *tab, int nc) {
-	
-	// Desenvolva o código da função
-		
-    return 0;
+    if (nc == 0) return -1;
+    int indice_max_pop = 0;
+    int max_pop = tab[0].homens + tab[0].mulheres;
+    for (int i = 1; i < nc; i++) {
+        int pop = tab[i].homens + tab[i].mulheres;
+        if (pop > max_pop) {
+            max_pop = pop;
+            indice_max_pop = i;
+        }
+    }
+    return indice_max_pop;
 }
 
 /*
  * Determina índice do concelho com maior densidade.
  */
 int max_densidade(concelho *tab, int nc) {
-	
-	// Desenvolva o código da função
-		
-    return -1;
+    if (nc == 0) return -1;
+    int indice_max_densidade = 0;
+    float max_densidade = (tab[0].homens + tab[0].mulheres) / tab[0].area;
+    for (int i = 1; i < nc; i++) {
+        float densidade = (tab[i].homens + tab[i].mulheres) / tab[i].area;
+        if (densidade > max_densidade) {
+            max_densidade = densidade;
+            indice_max_densidade = i;
+        }
+    }
+    return indice_max_densidade;
 }
+
 
 /*
  * Determina índice do concelho com maior relação h/100m.
  */
 int max_h100m(concelho *tab, int nc) {
-	
-	// Desenvolva o código da função
-		
-    return -1;
+    if (nc == 0) return -1;
+    int indice_max_h100m = 0;
+    float max_h100m = (float)tab[0].homens / tab[0].mulheres * 100;
+    for (int i = 1; i < nc; i++) {
+        float h100m = (float)tab[i].homens / tab[i].mulheres * 100;
+        if (h100m > max_h100m) {
+            max_h100m = h100m;
+            indice_max_h100m = i;
+        }
+    }
+    return indice_max_h100m;
 }
+
 
 /*
  * B.3.a)
  * Copia tabela para tabela nova.
  */
 concelho *copia_tabela(concelho *tab_in, int nc) {
-	
-	// Desenvolva o código da função
-		
-    return NULL;
+    concelho *tab_out = malloc(nc * sizeof(concelho));
+    if (tab_out == NULL) {
+        printf("Erro ao alocar memória.\n");
+        exit(1);
+    }
+    for (int i = 0; i < nc; i++) {
+        strcpy(tab_out[i].nome, tab_in[i].nome);
+        tab_out[i].homens = tab_in[i].homens;
+        tab_out[i].mulheres = tab_in[i].mulheres;
+        tab_out[i].area = tab_in[i].area;
+    }
+    return tab_out;
 }
+
 
 void ordem_area(concelho *tab_ord, int nc) {
-	
-	// Desenvolva o código da função
 
+    qsort(tab_ord, nc, sizeof(concelho), compara_area);
 }
+
+int compara_area(const void *a, const void *b) {
+    const concelho *concelho_a = (const concelho *)a;
+    const concelho *concelho_b = (const concelho *)b;
+
+    if (concelho_a->area < concelho_b->area) return -1;
+    if (concelho_a->area > concelho_b->area) return 1;
+    return 0;
+}
+
 
 void ordem_pop(concelho *tab_ord, int nc) {
-	
-	// Desenvolva o código da função
 
+    qsort(tab_ord, nc, sizeof(concelho), compara_pop);
 }
+
+int compara_pop(const void *a, const void *b) {
+    const concelho *concelho_a = (const concelho *)a;
+    const concelho *concelho_b = (const concelho *)b;
+
+    int pop_a = concelho_a->homens + concelho_a->mulheres;
+    int pop_b = concelho_b->homens + concelho_b->mulheres;
+    if (pop_a < pop_b) return -1;
+    if (pop_a > pop_b) return 1;
+    return 0;
+}
+
 
 void ordem_h100m(concelho *tab_ord, int nc) {
-	
-	// Desenvolva o código da função
 
+    qsort(tab_ord, nc, sizeof(concelho), compara_h100m);
 }
+
+int compara_h100m(const void *a, const void *b) {
+    const concelho *concelho_a = (const concelho *)a;
+    const concelho *concelho_b = (const concelho *)b;
+
+    float h100m_a = (float)concelho_a->homens / concelho_a->mulheres * 100;
+    float h100m_b = (float)concelho_b->homens / concelho_b->mulheres * 100;
+    if (h100m_a < h100m_b) return -1;
+    if (h100m_a > h100m_b) return 1;
+    return 0;
+}
+
 
 int main() {
     setlocale(LC_CTYPE, "");

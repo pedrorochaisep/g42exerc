@@ -1,0 +1,17 @@
+commit bbae2573a3fd4048329ef6f8a35f26d42dbb27f7
+Author: pedrorochapvz <pedrorochapvz@gmail.com>
+Date:   Sun Apr 7 11:53:02 2024 +0100
+
+    Acrescentadas as funções de cálculo de áreas
+
+commit 93eb3a0f12584e3e0a10cc047e882d3720643aed
+Author: pedrorochapvz <pedrorochapvz@gmail.com>
+Date:   Sun Apr 7 11:49:14 2024 +0100
+
+    Implementar função ler_tabela
+
+commit 0dfecfbdbe47a6c62fe4ca908d6610b8b4366fac
+Author: pedrorochapvz <pedrorochapvz@gmail.com>
+Date:   Sun Apr 7 11:41:02 2024 +0100
+
+    Adicionar arquivo .gitignore
